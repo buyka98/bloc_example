@@ -45,10 +45,40 @@ class _TodoScreenState extends State<TodoScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
-          child: blocBuilder(),
+          child: builder(),
         ),
       ),
     );
+  }
+
+  Widget builder() {
+    return Builder(builder: (context) {
+      TodoState state = context.watch<TodoCubit>().state;
+      if (state is TodoLoading) {
+        return CircularProgressIndicator();
+      } else {
+        return ListView.builder(
+            itemCount: state.todoList.length,
+            itemBuilder: (context, int i) {
+              return TodoItem(
+                todo: state.todoList[i].todo!,
+                docId: state.todoList[i].docId,
+                handleEdit: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                              value: todoCubit,
+                              child: TodoEditScreen(
+                                todo: state.todoList[i].todo!,
+                                docId: state.todoList[i].docId,
+                              ),
+                            )),
+                  );
+                },
+              );
+            });
+      }
+    });
   }
 
   Widget blocBuilder() {

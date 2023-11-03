@@ -72,10 +72,15 @@ class _TodoAddScreenState extends State<TodoAddScreen> {
                 SizedBox(height: 25),
                 InkWell(
                   onTap: () async {
-                    BlocProvider.of<TodoCubit>(context).addTodo(
-                      detail: todoController.text,
-                      deadline: dateController.text,
-                    );
+                    context.read<TodoCubit>().addTodo(
+                          detail: todoController.text,
+                          deadline: dateController.text,
+                        );
+                    // same as above
+                    // BlocProvider.of<TodoCubit>(context).addTodo(
+                    //   detail: todoController.text,
+                    //   deadline: dateController.text,
+                    // );
 
                     Future.delayed(Duration(milliseconds: 200), () {
                       Navigator.pop(context);
